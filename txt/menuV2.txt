@@ -1,0 +1,91 @@
+// TRABAJO EN CLASE
+
+var colors = require('colors');
+var inquirer = require('inquirer');
+const tareas = [];
+
+const questions = {
+    type: 'list',
+    name: 'options',
+    message: 'Escoge la opción de tu preferencia',
+    choices: [
+        {
+            value: '1',
+            name: '1. Crear tarea'
+        },
+        {
+            value: '2',
+            name: '2. Editar tarea'
+        },
+        {
+            value: '3',
+            name: '3. Eliminar tarea'
+        },
+        {
+            value: '4',
+            name: '4. Listar tareas'
+        },
+        {
+            value: '5',
+            name: '5. Salir'
+        }
+    ]
+};
+
+const menu = async () => {
+    console.clear();
+    console.log('==========================================='.blue);
+    console.log('=            Bienvenido al menú           ='.yellow);
+    console.log('==========================================='.blue);
+
+    const { options } = await inquirer.default.prompt(questions);
+    return options;
+};
+
+
+const crearTarea = async () => {
+    const { tarea } = await inquirer.default.prompt([
+        {
+            type: 'input',
+            name: 'tarea',
+            message: 'Ingresa la descripción de la tarea:'
+        }
+        
+    ]);
+    const { responsable } = await inquirer.default.prompt([
+        {
+            type: 'input',
+            name: 'responsable',
+            message: 'Ingresa el nombre del responsable de la tarea:'
+        }
+        
+    ]);
+    tareas.push({ id: tareas.length + 1, responsable: responsable, description: tarea });
+    console.log('Tarea creada exitosamente!'.green);
+};
+
+
+const listarTareas = () => {
+    console.log('\nTareas:');
+    tareas.forEach((tarea, index) => {
+        console.log(`${(index + 1).toString().green}. ${tarea.description}. responsable:${tarea.responsable}`);
+    });
+};
+
+const pause = async () => {
+    const question = [
+        {
+            type: 'input',
+            name: 'enter',
+            message: `Presione la tecla ${'enter'.green} para continuar`
+        }
+    ];
+    await inquirer.default.prompt(question);
+};
+
+module.exports = {
+    menu,
+    crearTarea,
+    listarTareas,
+    pause
+};
